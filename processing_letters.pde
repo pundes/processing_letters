@@ -68,6 +68,7 @@ class Letter {
     yOffset = yOffsetTemp;
     x = xTemp;
     y = yTemp;
+    bol = false;
     aval = (int) random(min, max);
     bval = (int) random(min, max);
     cval = (int) random(min, max);
@@ -99,16 +100,11 @@ class Letter {
   }
 
   void rand() {
-    randval = (int) random(min, max);
-
-    if (randval==aval) {
+    float noiseValue = noise(millis() * 0.001); // Adjust the noise parameter as needed
+    if (noiseValue < 0.3) {
       bol = true;
-    } else if (randval==bval) {
+    } else {
       bol = false;
-    } else if (randval==cval) {
-      bolSquare = true;
-    } else if (randval==dval) {
-      bolSquare = false;
     }
   }
 
