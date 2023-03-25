@@ -6,6 +6,8 @@ int maxarrayval = 40;
 
 int index = 0;
 
+int start, startX = 0;
+int end, endX = maxarrayval;
 float noiseScale;
 
 void setup() {
@@ -20,11 +22,14 @@ void setup() {
   int highCount = height / unit;
   count = wideCount * highCount;
   mvLetter = new Letter[count];
+  
+  
 
   int index = 0;
   for (int y = 0; y < highCount; y++) {
     for (int x = 0; x < wideCount; x++) {
-      mvLetter[index++] = new Letter(minrandom, maxrandom, maxarrayval, x*unit, y*unit, unit/2, unit/2);
+      int singleLetter = (int)random(maxarrayval);
+      mvLetter[index++] = new Letter(minrandom, maxrandom, maxarrayval, x*unit, y*unit, unit/2, unit/2, singleLetter);
     }
   }
   //mvLetter = new Letter(minrandom, maxrandom, maxarrayval);
@@ -34,10 +39,29 @@ void draw() {
 
   index++;
 
-  if (index % 4 == 0) {
+  if (index % 2 == 0) {
     for (int i = 0; i < mvLetter.length; i++) {
-      mvLetter[i].rand();
       mvLetter[i].draw();
+      mvLetter[i].bol = false;
+    }
+
+    float noiseValue = noise(frameCount * 0.01);
+    start = floor(map(noiseValue, 0, 1, 0, count));
+    end = ceil(map(noiseValue, 0, 1, 0, count));
+    
+    if(start < count/2) {
+      startX = start;
+    }
+    
+    else if (end > count/2 && end < count) {
+      endX = end;
+    }
+
+    println(startX);
+    //println(end);
+
+    for (int i = startX; i < endX; i++) {
+      mvLetter[i].bol = true;
     }
   }
 }
@@ -54,25 +78,29 @@ class Letter {
   int dval;
   int xOffset;
   int yOffset;
+  int single;
   float x, y;
 
   //letters
   char[] letters;
   int maxarray;
-  char text = 'a';
+  char text;
 
-  Letter(int minTemp, int maxTemp, int maxArrayTemp, int xOffsetTemp, int yOffsetTemp, int xTemp, int yTemp) {
+  Letter(int minTemp, int maxTemp, int maxArrayTemp, int xOffsetTemp, int yOffsetTemp, int xTemp, int yTemp, int singleL) {
     min = minTemp;
     max = maxTemp;
     xOffset = xOffsetTemp;
     yOffset = yOffsetTemp;
     x = xTemp;
     y = yTemp;
-    bol = false;
+    single = singleL;
     aval = (int) random(min, max);
     bval = (int) random(min, max);
     cval = (int) random(min, max);
     dval = (int) random(min, max);
+    
+    
+   
 
     //letters
     maxarray = maxArrayTemp;
@@ -97,22 +125,16 @@ class Letter {
     letters[index++] = '\';
     letters[index++] = '/';
     letters[index++] = '~';
+    
+    text = letters[single];
   }
 
-  void rand() {
-    float noiseValue = noise(millis() * 0.001); // Adjust the noise parameter as needed
-    if (noiseValue < 0.3) {
-      bol = true;
-    } else {
-      bol = false;
-    }
-  }
 
   void draw() {
     pushMatrix();
     textSize(25);
     translate(xOffset, yOffset);
-    if (bol && !bolSquare) {
+    if (bol) {
       int counter = (int)random(0, maxarrayval);
       text = letters[counter];
       rectMode(CORNER);
@@ -123,16 +145,6 @@ class Letter {
       text(letters[counter], 12, 28);
     }
 
-    if (bol && bolSquare) {
-      int counter = (int)random(0, maxarrayval);
-      text = letters[counter];
-      rectMode(CORNER);
-      fill(0);
-      noStroke();
-      rect(0, 0, unit, unit);
-      fill(149, 165, 166);
-      text(letters[counter], 12, 28);
-    }
 
     if (!bol) {
       rectMode(CORNER);
