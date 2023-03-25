@@ -45,9 +45,9 @@ void draw() {
       mvLetter[i].bol = false;
     }
 
-    float noiseValue = noise(frameCount * 0.01);
+    float noiseValue = noise(frameCount);
     start = floor(map(noiseValue, 0, 1, 0, count));
-    end = ceil(map(noiseValue, 0, 1, 0, count));
+    end = floor(map(noiseValue, 0, 1, 0, count));
     
     if(start < count/2) {
       startX = start;
