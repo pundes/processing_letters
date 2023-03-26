@@ -8,7 +8,7 @@ int index = 0;
 
 int start, startX = 0;
 int end, endX = maxarrayval;
-float noiseScale;
+float noiseValue;
 
 void setup() {
   background(149, 165, 166);
@@ -22,8 +22,6 @@ void setup() {
   int highCount = height / unit;
   count = wideCount * highCount;
   mvLetter = new Letter[count];
-  
-  
 
   int index = 0;
   for (int y = 0; y < highCount; y++) {
@@ -43,21 +41,32 @@ void draw() {
     for (int i = 0; i < mvLetter.length; i++) {
       mvLetter[i].draw();
       mvLetter[i].bol = false;
+      noiseValue = noise(frameCount * 0.01);
+      start = floor(map(noiseValue, 0, 1, 0, count));
+      end = floor(map(noiseValue, 0, 1, 0, count));
     }
 
-    float noiseValue = noise(frameCount);
-    start = floor(map(noiseValue, 0, 1, 0, count));
-    end = floor(map(noiseValue, 0, 1, 0, count));
-    
-    if(start < count/2) {
+
+
+    if (start < count/2) {
       startX = start;
-    }
-    
-    else if (end > count/2 && end < count) {
-      endX = end;
+    } else if (start > count/2) {
+      start = floor(start * noiseValue);
+      if (start < count / 2) {
+        startX = start;
+      }
     }
 
-    println(startX);
+    if (end > count/2) {
+      endX = end;
+    } else if (end < count/2) {
+      start = floor(start * (noiseValue * 10));
+      if (end > count/2) {
+        endX = end;
+      }
+    }
+
+    println(start);
     //println(end);
 
     for (int i = startX; i < endX; i++) {
@@ -98,9 +107,9 @@ class Letter {
     bval = (int) random(min, max);
     cval = (int) random(min, max);
     dval = (int) random(min, max);
-    
-    
-   
+
+
+
 
     //letters
     maxarray = maxArrayTemp;
@@ -125,7 +134,7 @@ class Letter {
     letters[index++] = '\';
     letters[index++] = '/';
     letters[index++] = '~';
-    
+
     text = letters[single];
   }
 
