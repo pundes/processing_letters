@@ -41,9 +41,9 @@ void draw() {
     for (int i = 0; i < mvLetter.length; i++) {
       mvLetter[i].draw();
       mvLetter[i].bol = false;
-      noiseValue = noise(frameCount * 0.01);
-      start = floor(map(noiseValue, 0, 1, 0, count));
-      end = floor(map(noiseValue, 0, 1, 0, count));
+      noiseValue = noise(frameCount * 0.01f);
+      start = (int) Math.floor(map(noiseValue, 0, 1, 0, count));
+      end = (int) Math.floor(map(noiseValue, 0, 1, 0, count));
     }
 
 
