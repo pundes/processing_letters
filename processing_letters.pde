@@ -12,7 +12,7 @@ float noiseValue;
 
 void setup() {
   background(149, 165, 166);
-  size(1280, 720);
+  size(1920, 1080);
   frameRate(60);
 
   int minrandom = 0;
@@ -42,29 +42,29 @@ void draw() {
       mvLetter[i].draw();
       mvLetter[i].bol = false;
       noiseValue = noise(frameCount * 0.01f);
-      start = (int) Math.floor(map(noiseValue, 0, 1, 0, count/2));
-      end = (int) Math.floor(map(noiseValue, 0, 1, count/2, count));
+      start = (int) Math.floor(map(noiseValue, 0, 1, 0, count));
+      end = (int) Math.floor(map(noiseValue, 0, 1, count/4, count));
     }
 
 
 
-    if (start < count/2) {
+    if (start < count) {
       startX = start;
-    } //else if (start > count/2) {
-    //  start = (int) Math.floor(start * noiseValue);
-    //  if (start < count / 2) {
-    //    startX = start;
-    //  }
-    //}
+    } else if (start > count / 4) {
+      start = (int) Math.floor(start * noiseValue);
+      if (start < count / 2) {
+        startX = start;
+      }
+    }
 
-    if (end > count/2) {
+    if (end < count) {
       endX = end;
-    } //else if (end < count/2) {
-    //  start = (int) Math.floor(start * (noiseValue * 10));
-    //  if (end > count/2) {
-    //    endX = end;
-    //  }
-    //}
+    } else if (end < count/4) {
+      start = (int) Math.floor(start * (noiseValue * 10));
+      if (end > count/2) {
+        endX = end;
+      }
+    }
 
     println(start);
     //println(end);
