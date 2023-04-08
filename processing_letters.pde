@@ -8,7 +8,8 @@ int index = 0;
 
 int start, startX = 0;
 int end, endX = maxarrayval;
-float noiseValue;
+float noiseValueX;
+float noiseValueY;
 
 void setup() {
   background(149, 165, 166);
@@ -41,35 +42,36 @@ void draw() {
     for (int i = 0; i < mvLetter.length; i++) {
       mvLetter[i].draw();
       mvLetter[i].bol = false;
-      noiseValue = noise(frameCount * 0.01f);
-      start = (int) Math.floor(map(noiseValue, 0, 1, 0, count));
-      end = (int) Math.floor(map(noiseValue, 0, 1, count/4, count));
+      noiseValueX = noise(frameCount * 0.01f);
+      noiseValueY = noise(frameCount * 0.01f);
+      start = (int) Math.floor(map(noiseValueX, 0, 1, 0, count/2));
+      end = (int) Math.floor(map(noiseValueY, 0, 1, count/2, count));
     }
 
 
 
-    if (start < count) {
-      startX = start;
-    } else if (start > count / 4) {
-      start = (int) Math.floor(start * noiseValue);
-      if (start < count / 2) {
-        startX = start;
-      }
-    }
+//    if (start < count) {
+//      startX = start;
+//    } else if (start > count / 4) {
+//      start = (int) Math.floor(start * noiseValue);
+//      if (start < count / 2) {
+//        startX = start;
+//      }
+//    }
 
-    if (end < count) {
-      endX = end;
-    } else if (end < count/4) {
-      start = (int) Math.floor(start * (noiseValue * 10));
-      if (end > count/2) {
-        endX = end;
-      }
-    }
+//    if (end < count) {
+//      endX = end;
+//    } else if (end < count/4) {
+//      start = (int) Math.floor(start * (noiseValue * 10));
+//      if (end > count/2) {
+//        endX = end;
+//      }
+//    }
 
-    println(start);
+//    println(start);
     //println(end);
 
-    for (int i = startX; i < endX; i++) {
+    for (int i = start; i < end; i++) {
       mvLetter[i].bol = true;
     }
   }
@@ -151,7 +153,7 @@ class Letter {
       noStroke();
       rect(0, 0, unit, unit);
       fill(0);
-      text(letters[counter], 12, 28);
+      text(letters[counter], 16, 32);
     }
 
 
